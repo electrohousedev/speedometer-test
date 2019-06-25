@@ -1,0 +1,5 @@
+speedometer/*
+.gradle
+local.properties
+*.gradle
+android.iml

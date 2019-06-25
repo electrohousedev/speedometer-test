@@ -1,0 +1,7 @@
+.DS_Store
+bin
+lib
+assets
+build
+config.sh
+.idea
