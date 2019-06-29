@@ -1,0 +1,83 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+    - image: circleci/android:api-28
+    steps:
+    - checkout
+    - run:
+        name: Bootstrap project
+        command: ./scripts/bootstrap.sh
+    - restore_cache:
+        key: ndk-fd94d0be6017c6acbd193eb95e09cf4b6f61b834
+    - run:
+        command: |
+          [ -w /usr/local/bin ] && SUDO="" || SUDO=sudo
+          if [[ -d /opt/android/android-ndk-r19c && \
+            -n "$(ls -A /opt/android/android-ndk-r19c)" ]]; then
+            echo "Android NDK already installed"
+          else
+            $SUDO curl --silent --show-error --location --fail --retry 3 \
+              --output /tmp/android-ndk-r19c.zip \
+              https://dl.google.com/android/repository/android-ndk-r19c-linux-x86_64.zip
+
+            $SUDO echo "fd94d0be6017c6acbd193eb95e09cf4b6f61b834 /tmp/android-ndk-r19c.zip" > /tmp/android-ndk-r19c.zip.sha1
+
+            sha1sum -c /tmp/android-ndk-r19c.zip.sha1
+
+            $SUDO unzip -q /tmp/android-ndk-r19c.zip -d /opt/android
+            $SUDO rm -f /tmp/android-ndk-r19c*
+
+            $SUDO chown -R circleci:circleci /opt/android/android-ndk-r19c
+
+            export ANDROID_NDK_HOME=/opt/android/android-ndk-r19c
+
+            if [[ -d /opt/android/android-ndk-r19c && \
+              -n "$(ls -A /opt/android/android-ndk-r19c)" ]]; then
+              echo "Android NDK installed"
+            else
+              echo "Android NDK did not install successfully"
+              exit 1
+            fi
+          fi
+
+        name: Install Android NDK
+
+    - save_cache:
+        paths:
+        - /opt/android/android-ndk-r19c
+        key: ndk-fd94d0be6017c6acbd193eb95e09cf4b6f61b834
+  
+    - run:
+        name: Create project files
+        command: |
+          export ANDROIDSDK=${ANDROID_HOME}
+          export ANDROIDNDK=/opt/android/android-ndk-r19c
+          echo "ANDROIDSDK: ${ANDROIDSDK}"
+          echo "ANDROIDNDK: ${ANDROIDNDK}"
+          ./scripts/make_project.sh
+    - restore_cache:
+        key: jars-{{ checksum "projects/android/build.gradle" }}-{{ checksum  "projects/android/speedometer/build.gradle"
+          }}
+    - run:
+        name: Download Dependencies
+        command: cd projects/android && ./gradlew androidDependencies
+    - save_cache:
+        paths:
+        - ~/.gradle
+        key: jars-{{ checksum "projects/android/build.gradle" }}-{{ checksum  "projects/android/speedometer/build.gradle" }}
+
+    - run:
+        name: Build apk
+        command: cd projects/android && ./gradlew assembleRelease
+    
+    - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
+          path: bin/android/speedometer-release.apk
+          destination: speedometer-release.apk
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - build
+
