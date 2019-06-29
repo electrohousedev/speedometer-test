@@ -1,0 +1,39 @@
+return {
+	file="system_font_bold_italic_20.png",
+	height=24,
+	description={
+		family="System Font",
+		style="Bold Italic",
+		size=20
+	},
+	metrics={
+		ascender=20,
+		descender=-5,
+		height=24
+	},
+	texture={
+		file="system_font_bold_italic_20.png",
+		width=128,
+		height=128
+	},
+	chars={
+		{char="/",width=7,x=1,y=1,w=20,h=26,ox=-6,oy=18},
+		{char="0",width=13,x=22,y=1,w=21,h=22,ox=-3,oy=18},
+		{char="1",width=10,x=44,y=1,w=17,h=22,ox=-3,oy=18},
+		{char="2",width=12,x=62,y=1,w=21,h=22,ox=-4,oy=18},
+		{char="3",width=13,x=84,y=1,w=21,h=22,ox=-4,oy=18},
+		{char="4",width=13,x=1,y=28,w=21,h=22,ox=-4,oy=18},
+		{char="5",width=13,x=23,y=28,w=21,h=22,ox=-4,oy=18},
+		{char="6",width=13,x=45,y=28,w=21,h=22,ox=-3,oy=18},
+		{char="7",width=11,x=67,y=28,w=21,h=22,ox=-4,oy=18},
+		{char="8",width=13,x=89,y=28,w=21,h=22,ox=-4,oy=18},
+		{char="9",width=13,x=1,y=52,w=21,h=22,ox=-4,oy=18},
+		{char="h",width=12,x=23,y=52,w=21,h=22,ox=-5,oy=18},
+		{char="i",width=5,x=45,y=51,w=14,h=23,ox=-4,oy=19},
+		{char="k",width=11,x=60,y=52,w=21,h=22,ox=-5,oy=18},
+		{char="m",width=17,x=82,y=55,w=26,h=19,ox=-5,oy=15},
+		{char="n",width=12,x=1,y=75,w=21,h=19,ox=-5,oy=15},
+		{char="r",width=8,x=23,y=75,w=18,h=19,ox=-5,oy=15},
+		{char="x",width=11,x=42,y=75,w=21,h=19,ox=-5,oy=15},
+	},
+}

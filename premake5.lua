@@ -42,3 +42,25 @@ files {
 includedirs { 'src' }
 
 android_res { path.getabsolute('projects/android/res') }
+
+local assets_path = path.join('projects' , platform_dir , 'assets')
+os.mkdir(path.join(assets_path,'data'))
+prebuildcommands { 
+	path.getabsolute(path.join(SandboxRoot,'bin',host_dir,'assetsbuilder')) .. iif(os.ishost('windows'),'.exe','') ..
+		' --scripts=' .. path.getabsolute(path.join(SandboxRoot,'utils','assetsbuilder','scripts')) ..
+		' --src=' .. path.getabsolute('data') ..
+		' --dst=' .. path.getabsolute(path.join(assets_path,'data')) ..
+		' --platform=' .. platform_dir 
+}
+
+
+files { assets_path .. '/data' }
+
+if os.istarget('macosx') then
+	files {
+		'projects/osx/Info.plist',
+	}
+	xcodebuildresources {
+		'assets/data'
+	}
+end
