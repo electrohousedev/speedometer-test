@@ -11,7 +11,7 @@ UseModules = {
 }
 
 AndroidConfig = {
-	abi = {'x86'},
+	abi = {'x86','arm64-v8a','armeabi-v7a'},
 	api_level = 16,
 	target_api_level = 28,
 	build_api_level = 28,
@@ -20,10 +20,16 @@ AndroidConfig = {
 	stl = 'c++_static',
 	package = 'com.test.speedometer',
 	screenorientation = 'sensorLandscape',
+	manifest='projects/android/AndroidManifest.xml',
 	versioncode= 100,
 	versionname='0.100',
 	permissions = {},
+	keystore='projects/android/key/test.keystore',
+	keyalias='test',
+
 }
+
+
 
 function solution_config()
 	cppdialect "C++11"
@@ -41,7 +47,7 @@ files {
 
 includedirs { 'src' }
 
-android_res { path.getabsolute('projects/android/res') }
+
 
 local assets_path = path.join('projects' , platform_dir , 'assets')
 os.mkdir(path.join(assets_path,'data'))
@@ -63,4 +69,14 @@ if os.istarget('macosx') then
 	xcodebuildresources {
 		'assets/data'
 	}
+elseif os.istarget('android') then
+	files {
+		'projects/android/csrc/**.cpp'
+	}
+	android_res { path.getabsolute('projects/android/res') }
+	android_assets_path{
+			path.getabsolute('projects/android/assets'),
+		}
+	android_keystore_pwd('123456')
+	android_key_pwd('123456')
 end
