@@ -17,8 +17,12 @@ elif [[ "$HOST_PLATFORM" == "Linux" ]]; then
 	HOST_PLATFORM="linux"
 fi
 
-rm -Rf build/android
+
 ./sandbox/bin/$HOST_PLATFORM/premake5 --scripts=./sandbox/premake --os=android \
 	--android-sdk-dir=$ANDROIDSDK \
 	--android-ndk-dir=$ANDROIDNDK \
 	android $@ || exit 2
+if [[ "$HOST_PLATFORM" == "osx" ]]; then
+	./sandbox/bin/$HOST_PLATFORM/premake5 --scripts=./sandbox/premake \
+		xcode4 $@ || exit 2
+fi

@@ -1,6 +1,11 @@
 ProjectName = 'speedometer'
 SandboxRoot = 'sandbox'
 
+local host_dir = os.host()
+if host_dir == 'macosx' then
+	host_dir = 'osx'
+end
+
 UseModules = {
 	
 }
@@ -19,6 +24,13 @@ AndroidConfig = {
 	versionname='0.100',
 	permissions = {},
 }
+
+function solution_config()
+	cppdialect "C++11"
+	xcodebuildsettings { 
+		MACOSX_DEPLOYMENT_TARGET = '10.9' , 
+	}
+end
 
 require 'sandbox'
 
