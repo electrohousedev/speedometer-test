@@ -52,6 +52,15 @@ function scene:build(  )
 		Pos = {680,390}
 	})
 
+	local overload_indicator = application.app:create_trigger('tachometer')
+	overload_indicator.Translate = { 745, 335 }
+	overload_indicator.Color = '#aa4444'
+	overload_indicator:AddObject(common.new{
+		Sandbox.Sprite(),
+		Image = images.led
+	})
+
+	self.root:AddObject(overload_indicator)
 	
 end
 

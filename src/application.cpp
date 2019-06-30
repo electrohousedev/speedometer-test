@@ -7,6 +7,7 @@
 #include "sensors/sensors.h"
 #include "ui/arrow.h"
 #include "ui/ring.h"
+#include "ui/trigger.h"
 
 class Application : public Sandbox::Application {
     SB_META_OBJECT;
@@ -43,6 +44,13 @@ public:
         }
         return sb::intrusive_ptr<ui::Arrow>(new ui::Arrow(sensor));
     }
+    sb::intrusive_ptr<ui::Trigger> create_trigger( const char* name ) const {
+        controller::trigger_value::cptr sensor = m_controller.get_trigger(name);
+        if (!sensor) {
+            return sb::intrusive_ptr<ui::Trigger>();
+        }
+        return sb::intrusive_ptr<ui::Trigger>(new ui::Trigger(sensor));
+    }
     void BindModules( Sandbox::LuaVM* lua ) override;
 };
 
@@ -50,10 +58,15 @@ public:
 SB_META_DECLARE_OBJECT(::Application,Sandbox::Application)
 SB_META_BEGIN_KLASS_BIND(::Application)
 SB_META_METHOD(create_arrow)
+SB_META_METHOD(create_trigger)
 SB_META_END_KLASS_BIND()
 
 SB_META_BEGIN_KLASS_BIND(ui::Arrow)
 SB_META_PROPERTY_RW_DEF(ValueScale)
+SB_META_END_KLASS_BIND()
+
+SB_META_BEGIN_KLASS_BIND(ui::Trigger)
+SB_META_PROPERTY_RW_DEF(VisibleValue)
 SB_META_END_KLASS_BIND()
 
 SB_META_BEGIN_KLASS_BIND(ui::Ring)
@@ -67,6 +80,7 @@ void Application::BindModules(Sandbox::LuaVM *lua) {
     Sandbox::Application::BindModules(lua);
     Sandbox::luabind::ExternClass<Application>(lua->GetVM());
     Sandbox::luabind::ExternClass<ui::Arrow>(lua->GetVM());
+    Sandbox::luabind::ExternClass<ui::Trigger>(lua->GetVM());
     Sandbox::luabind::Class<ui::Ring>(lua->GetVM());
 }
 
