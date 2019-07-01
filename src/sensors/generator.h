@@ -61,7 +61,8 @@ namespace sensors {
 
 	template <class ... Parts>
 	static inline auto generator(Parts&& ... parts) -> gen_seq<Parts...> {
-		return gen_seq<Parts ... >{ std::move(parts)... };
+        // good explanation why need forward there http://bajamircea.github.io/coding/cpp/2016/04/07/move-forward.html
+		return gen_seq<Parts ... >{ std::forward<Parts>(parts)... };
 	};
 
 }
