@@ -10,6 +10,14 @@ Need only once.
 ./scripts/bootstrap.sh
 ```
 
+Configure android SDK and NDK location:
+
+Create file `config.sh` at root of repo with paths, eg:
+```
+ANDROIDSDK=$SDKROOT/android-sdk
+ANDROIDNDK=$SDKROOT/android-ndk-r19c
+```
+
 Create project files.
 Need after add files and change settings.
 
